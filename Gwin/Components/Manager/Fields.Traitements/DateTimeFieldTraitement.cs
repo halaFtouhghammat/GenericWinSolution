@@ -2,7 +2,7 @@
 using App.Gwin.Fields;
 using App.Gwin.Components.Manager.Fields.Traitements.Params;
 using App.Shared.AttributesManager;
-using App.WinForm.Fields;
+using App.Components.Fields;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,12 +10,14 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.ComponentModel;
 
 namespace App.Gwin.FieldsTraitements
 {
     public class DateTimeFieldTraitement : BaseFieldTraitement, IFieldTraitements
     {
         private readonly object DateTime2;
+       
 
         public object GetTestValue(PropertyInfo propertyInfo)
         {
@@ -43,6 +45,9 @@ namespace App.Gwin.FieldsTraitements
         /// <returns>the created field</returns>
         public BaseField CreateField_In_EntryForm(CreateFieldParams param)
         {
+
+            this.errorProvider = param.errorProvider;
+
             DateTimeField dateTimeField = new DateTimeField();
             dateTimeField.StopAutoSizeConfig();
             dateTimeField.Name = param.PropertyInfo.Name;
@@ -52,13 +57,36 @@ namespace App.Gwin.FieldsTraitements
             dateTimeField.SizeControl = param.SizeControl;
 
             dateTimeField.TabIndex = param.TabIndex;
-            dateTimeField.Text_Label = param.ConfigProperty.DisplayProperty.Titre;
+            dateTimeField.Text_Label = param.ConfigProperty.DisplayProperty.Title;
             dateTimeField.ConfigSizeField();
+
+            // Validation
+            // We can not check validation of DateTime Control because we can not knew the default value 
+            //dateTimeField.Validating += DateTimeField_Validating;
 
             // Insertion à l'interface
             param.ConteneurFormulaire.Controls.Add(dateTimeField);
             return dateTimeField;
         }
+
+        // We can not check validation of DateTime Control because we can not knew the default value 
+        //private void DateTimeField_Validating(object sender, CancelEventArgs e)
+        //{
+        //    DateTimeField dateTimeField = (DateTimeField)sender;
+        //    string message = "La saisie de ce champs est oblégatoir";
+
+        //    // à vérifer avec les second
+        //    DateTime value = (DateTime)dateTimeField.Value;
+        //    if (value.Year == DateTime.Now.Year)
+        //    {
+        //        errorProvider.SetError(controle, message);
+        //        e.Cancel = true;
+        //    }
+        //    else
+        //        errorProvider.SetError(controle, "");
+        //}
+       
+
 
         public void ShowEntity_To_EntryForm(WriteEntity_To_EntryForm_Param param)
         {
@@ -95,7 +123,7 @@ namespace App.Gwin.FieldsTraitements
             dateTimeField.SizeControl = param.SizeControl;
             dateTimeField.OrientationField = Orientation.Horizontal;
             dateTimeField.TabIndex = param.TabIndex;
-            dateTimeField.Text_Label = param.ConfigProperty.DisplayProperty.Titre;
+            dateTimeField.Text_Label = param.ConfigProperty.DisplayProperty.Title;
 
             dateTimeField.ConfigSizeField();
             param.FilterContainer.Controls.Add(dateTimeField);
@@ -122,7 +150,7 @@ namespace App.Gwin.FieldsTraitements
             param.Column.ValueType = typeof(DateTime);
              
             param.Column.DataPropertyName = param.ConfigProperty.PropertyInfo.Name;
-            param.Column.HeaderText = param.ConfigProperty.DisplayProperty.Titre;
+            param.Column.HeaderText = param.ConfigProperty.DisplayProperty.Title;
             param.Column.Name = param.ConfigProperty.PropertyInfo.Name;
             param.Column.ReadOnly = true;
             if (param.ConfigProperty.DataGrid?.WidthColonne != 0)

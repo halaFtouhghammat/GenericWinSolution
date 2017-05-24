@@ -13,6 +13,7 @@ using App.Gwin.Application.Presentation.MainForm;
 using App.Gwin;
 using GenericWinForm.Demo.BAL;
 using GenericWinForm.Demo.DAL;
+using GenericWinForm.Demo.Entities.ProjectManager;
 
 namespace App.Shared.AttributesManager.Tests
 {
@@ -40,8 +41,8 @@ namespace App.Shared.AttributesManager.Tests
             foreach (PropertyInfo PropertyInfoName in typeof(TaskProject).GetProperties())
             {
                 ConfigProperty ConfigProperty = new ConfigProperty(PropertyInfoName, ConfigEntity);
-                Assert.IsNotNull(ConfigProperty.DisplayProperty.Titre);
-                Assert.AreNotEqual(ConfigProperty.DisplayProperty.Titre, String.Empty);
+                Assert.IsNotNull(ConfigProperty.DisplayProperty.Title);
+                Assert.AreNotEqual(ConfigProperty.DisplayProperty.Title, String.Empty);
             }
            
 

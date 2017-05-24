@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using App.Shared.AttributesManager;
 using System.Reflection;
+using App.Gwin.Entities.Resources.Glossary;
 
 namespace App.Gwin.FieldsTraitements
 {
@@ -62,6 +63,9 @@ namespace App.Gwin.FieldsTraitements
         /// <returns>the created field</returns>
         public BaseField CreateField_In_EntryForm(CreateFieldParams param)
         {
+            // Set ErrorProvider Instance
+            this.errorProvider = param.errorProvider;
+
             StringField stringField = new StringField();
             stringField.StopAutoSizeConfig();
             stringField.Name = param.PropertyInfo.Name;
@@ -71,19 +75,35 @@ namespace App.Gwin.FieldsTraitements
             stringField.SizeControl = param.SizeControl;
             stringField.IsMultiline = param.ConfigProperty.EntryForm.MultiLine;
             stringField.NombreLigne = param.ConfigProperty.EntryForm.NumberLine;
-            if(param.ConfigProperty.EntryForm.WidthControl != 0)
-            stringField.Width = param.ConfigProperty.EntryForm.WidthControl;
+            if (param.ConfigProperty.EntryForm.WidthControl != 0)
+                stringField.Width = param.ConfigProperty.EntryForm.WidthControl;
 
             stringField.TabIndex = param.TabIndex;
-            stringField.Text_Label = param.ConfigProperty.DisplayProperty.Titre;
+            stringField.Text_Label = param.ConfigProperty.DisplayProperty.Title;
             stringField.ConfigSizeField();
 
+            if (param.ConfigProperty.EntryForm.isRequired)
+                stringField.Validating += StringField_Validating;
             // Insertion à l'interface
             param.ConteneurFormulaire.Controls.Add(stringField);
             return stringField;
         }
 
-      
+        private void StringField_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            StringField stringField = (StringField)sender;
+            string message = Glossary.Entering_this_field_is_mandatory;
+
+            // à vérifer avec les second
+            if (stringField.isEmpty)
+            {
+                errorProvider.Clear();
+                errorProvider.SetError(stringField, message);
+                errorProvider.SetIconPadding(stringField, -20);
+                errorProvider.BlinkStyle = ErrorBlinkStyle.BlinkIfDifferentError;
+                e.Cancel = true;
+            }
+        }
 
         public void ShowEntity_To_EntryForm(WriteEntity_To_EntryForm_Param param)
         {
@@ -100,7 +120,7 @@ namespace App.Gwin.FieldsTraitements
             {
                 BaseField baseField = (BaseField)recherche.First();
                 if (baseField == null) throw new GwinException("The field " + param.ConfigProperty.PropertyInfo.Name + "not exit in EntryForm");
-               
+
                 if (valeur != null)
                     baseField.Value = valeur.Current;
             }
@@ -122,7 +142,7 @@ namespace App.Gwin.FieldsTraitements
             stringFiled.SizeControl = param.SizeControl;
             stringFiled.OrientationField = Orientation.Horizontal;
             stringFiled.TabIndex = param.TabIndex;
-            stringFiled.Text_Label = param.ConfigProperty.DisplayProperty.Titre;
+            stringFiled.Text_Label = param.ConfigProperty.DisplayProperty.Title;
 
             stringFiled.ConfigSizeField();
             param.FilterContainer.Controls.Add(stringFiled);
@@ -155,7 +175,7 @@ namespace App.Gwin.FieldsTraitements
         {
             param.Column.ValueType = typeof(LocalizedString);
             param.Column.DataPropertyName = param.ConfigProperty.PropertyInfo.Name;
-            param.Column.HeaderText = param.ConfigProperty.DisplayProperty.Titre;
+            param.Column.HeaderText = param.ConfigProperty.DisplayProperty.Title;
             param.Column.Name = param.ConfigProperty.PropertyInfo.Name;
             param.Column.ReadOnly = true;
             if (param.ConfigProperty.DataGrid?.WidthColonne != 0)

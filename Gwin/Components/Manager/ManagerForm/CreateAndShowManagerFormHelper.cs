@@ -2,6 +2,7 @@
 using App.Gwin.Application.BAL;
 using App.Gwin.Entities;
 using App.Gwin.GwinApplication.Security.Exception;
+using MetroFramework.Forms;
 using System;
 using System.Data.Entity;
 using System.Linq;
@@ -34,9 +35,11 @@ namespace App.Gwin.Application.Presentation.EntityManagement
         /// </summary>
         /// <param name="ContextType"></param>
         /// <param name="MdiForm">Mdi form that with MenuApplication</param>
-        public CreateAndShowManagerFormHelper(Type ContextType, IBaseForm MdiForm)
+        public CreateAndShowManagerFormHelper(Type ContextType, IBaseForm ParentForm)
         {
-            if (!((Form)MdiForm).IsMdiContainer) throw new Exception("FormApplicationMdi must be MdiContainer");
+            // Merto FrameWork not support MDI Application
+            // if (!((Form)MdiForm).IsMdiContainer) throw new Exception("FormApplicationMdi must be MdiContainer");
+
             this.MdiForm = MdiForm;
             this.ContextType = ContextType;
         }
@@ -119,32 +122,36 @@ namespace App.Gwin.Application.Presentation.EntityManagement
         /// <param name="addForm">Entity Management Form instance  </param>
         public void ShwoForm(Form addForm)
         {
-            try
-            {
+          
+
                 Cursor.Current = Cursors.WaitCursor;
-                Form form = ((BaseForm)MdiForm).MdiChildren.Where(f => f.Text == addForm.Text).FirstOrDefault();
-                if (form == null)
-                {
-                    addForm.MdiParent = (Form)MdiForm;
-                    addForm.StartPosition = FormStartPosition.WindowsDefaultLocation;
-                    addForm.WindowState = FormWindowState.Maximized;
-                    addForm.Show();
-                }
-                else
-                {
-                    if (form.WindowState == FormWindowState.Maximized)
-                        form.WindowState = FormWindowState.Normal;
-                    else
-                        form.WindowState = FormWindowState.Maximized;
-                }
-
+                addForm.WindowState = FormWindowState.Normal;
+                addForm.ShowDialog();
                 Cursor.Current = Cursors.Default;
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
 
-            }
+
+                // Check if Form is Showne
+                //Form form = ((BaseForm)MdiForm).MdiChildren.Where(f => f.Text == addForm.Text).FirstOrDefault();
+                //if (form == null)
+                //{
+
+                //   // addForm.MdiParent = (MetroForm) MdiForm;
+                //    //addForm.StartPosition = FormStartPosition.WindowsDefaultLocation;
+                //    //addForm.WindowState = FormWindowState.Maximized;
+                //    addForm.Show();
+                //   // addForm.ShowDialog((MetroForm) MdiForm);
+                   
+                //}
+                //else
+                //{
+                //    if (form.WindowState == FormWindowState.Maximized)
+                //        form.WindowState = FormWindowState.Normal;
+                //    else
+                //        form.WindowState = FormWindowState.Maximized;
+                //}
+
+                
+          
 
 
         }

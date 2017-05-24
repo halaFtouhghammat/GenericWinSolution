@@ -13,6 +13,7 @@ using App.Gwin;
 using static System.Net.Mime.MediaTypeNames;
 using App.Gwin.Application.Presentation.MainForm;
 using GenericWinForm.Demo.DAL;
+using GenericWinForm.Demo.Entities.ProjectManager;
 
 namespace GenericWinForm.Demo.BAL.Tests
 {
@@ -30,12 +31,12 @@ namespace GenericWinForm.Demo.BAL.Tests
         public void ApplyBusinessRolesAfterValuesChangedTest()
         {
             TaskProject EntityMiniConfig = new TaskProject();
-            EntityMiniConfig.Title = "Hello";
+            EntityMiniConfig.Title.Current = "Hello";
             // Create entityMinConfigBLO dynamicly
             IGwinBaseBLO entityMinConfigBLO = GwinBaseBLO<BaseEntity>.CreateBLO_Instance(typeof(TaskProject), typeof(BaseBLO<>));
             entityMinConfigBLO.ApplyBusinessRolesAfterValuesChanged(nameof(TaskProject.Title), EntityMiniConfig);
 
-            Assert.AreEqual(EntityMiniConfig.Title, "HELLO");
+            Assert.AreEqual(EntityMiniConfig.Title.Current, "HELLO");
 
         }
     }

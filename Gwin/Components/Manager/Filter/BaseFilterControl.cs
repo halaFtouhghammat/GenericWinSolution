@@ -14,7 +14,7 @@ using App.Shared.AttributesManager;
 using App.Gwin.Entities;
 using System.Resources;
 using App.Gwin.Shared.Resources;
-using App.WinForm.Fields;
+using App.Components.Fields;
 using System.Collections;
 using App.Gwin.Components.Manager.Fields.Traitements.Params;
 using App.Gwin.FieldsTraitements;
@@ -84,6 +84,23 @@ namespace App.Gwin.EntityManagement
         public BaseFilterControl(IGwinBaseBLO BAO, Dictionary<string, object> ValeursFiltre)
         {
             InitializeComponent();
+
+
+           
+            if (GwinApp.isRightToLeft)
+            {
+                this.flowLayoutPanel1.FlowDirection = FlowDirection.RightToLeft;
+                this.groupBoxFiltrage.RightToLeft = RightToLeft.Yes;
+            }
+
+            else
+            {
+                this.flowLayoutPanel1.FlowDirection = FlowDirection.LeftToRight;
+                this.groupBoxFiltrage.RightToLeft = RightToLeft.No;
+            }
+                
+
+
             this.FilterContainer = this.flowLayoutPanel1;
             this.BLO = BAO;
             this.DefaultFilterValues = ValeursFiltre;

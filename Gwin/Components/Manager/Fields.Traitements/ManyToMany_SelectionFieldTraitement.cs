@@ -22,7 +22,7 @@ namespace App.Gwin.FieldsTraitements
             List<BaseEntity> ls = null;
             ls = param.BaseField.Value as List<BaseEntity>;
 
- 
+
             IGwinBaseBLO ServicesEntity = param.EntityBLO
                 .CreateServiceBLOInstanceByTypeEntityAndContext(
                     param.ConfigProperty.PropertyInfo.PropertyType.GetGenericArguments()[0],
@@ -76,7 +76,7 @@ namespace App.Gwin.FieldsTraitements
             {
                 TabPage tabPage = new TabPage();
                 tabPage.Name = "tabPage" + param.PropertyInfo.Name;
-                tabPage.Text = param.ConfigProperty.DisplayProperty.Titre;
+                tabPage.Text = param.ConfigProperty.DisplayProperty.Title;
                 param.TabControlForm.TabPages.Add(tabPage);
                 param.ConteneurFormulaire = tabPage;
             }
@@ -91,7 +91,8 @@ namespace App.Gwin.FieldsTraitements
                 if (ls_obj != null) ls_default_value = ls_obj.Cast<BaseEntity>().ToList();
             }
 
-
+            if (param.SizeControl.Height < 80)
+                param.SizeControl = new System.Drawing.Size(param.SizeControl.Width, 100);
 
             ManyToManyField manyToManyField = new ManyToManyField(param.PropertyInfo,
                                                 param.OrientationField,
@@ -102,7 +103,7 @@ namespace App.Gwin.FieldsTraitements
                                                 param.EntityBLO);
             manyToManyField.Name = param.PropertyInfo.Name;
 
-           
+
 
             if (param.ConfigProperty.EntryForm?.TabPage == true)
             {
@@ -161,7 +162,7 @@ namespace App.Gwin.FieldsTraitements
         {
             param.Column.ValueType = typeof(String);
             param.Column.DataPropertyName = param.ConfigProperty.PropertyInfo.Name;
-            param.Column.HeaderText = param.ConfigProperty.DisplayProperty.Titre;
+            param.Column.HeaderText = param.ConfigProperty.DisplayProperty.Title;
             param.Column.Name = param.ConfigProperty.PropertyInfo.Name;
             param.Column.ReadOnly = true;
             if (param.ConfigProperty.DataGrid?.WidthColonne != 0)

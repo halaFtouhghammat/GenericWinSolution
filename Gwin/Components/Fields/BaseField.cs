@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Reflection;
+using System.Runtime.Serialization;
 using System.Windows.Forms;
 
 namespace App.Gwin.Fields
@@ -9,12 +10,12 @@ namespace App.Gwin.Fields
     /// <summary>
     /// Base Field 
     /// </summary>
-    public partial class BaseField : UserControl, IBaseField
+    public partial class BaseField : UserControl, IBaseField, ISerializable
     {
 
         #region Events
         /// <summary>
-        /// Value is changed
+        /// Value changed
         /// </summary>
         public event EventHandler ValueChanged;
         protected void onValueChanged(object sender, EventArgs e)
@@ -33,13 +34,12 @@ namespace App.Gwin.Fields
         }
         #endregion
 
-
-
         #region Properties
         /// <summary>
         /// PropertyInfo
         /// </summary>
         public PropertyInfo PropertyInfo { set; get; }
+
         /// <summary>
         /// The value of field
         /// </summary>
@@ -70,6 +70,10 @@ namespace App.Gwin.Fields
         /// </summary>
         public string Text_Label
         {
+            get
+            {
+                return this.labelField.Text;
+            }
             set
             {
                 this.labelField.Text = value;
@@ -93,7 +97,8 @@ namespace App.Gwin.Fields
             }
         }
         private Size sizezControl;
-        public Size SizeControl {
+        public Size SizeControl
+        {
             get
             {
                 return this.sizezControl;
@@ -112,8 +117,12 @@ namespace App.Gwin.Fields
         /// Indicate whether the size configuration is automatic
         /// Default is True
         /// </summary>
-        public bool AutoSizeConfig { get;  set; }
+        public bool AutoSizeConfig { get; set; }
 
+        /// <summary>
+        /// Shwen order in Container
+        /// </summary>
+        public int Order { set; get; }
         #endregion
 
         #region Constructeurs
@@ -123,13 +132,28 @@ namespace App.Gwin.Fields
         public BaseField()
         {
             InitializeComponent();
-            AutoSizeConfig = true;
-            this.StopAutoSizeConfig();
-            this.SizeLabel = new Size(100, 20);
-            this.SizeControl = new Size(100, 20);
-            this.StartAutoSizeConfig();
+
+            if (System.ComponentModel.LicenseManager.UsageMode != System.ComponentModel.LicenseUsageMode.Designtime)
+            {
+                AutoSizeConfig = true;
+                this.StopAutoSizeConfig();
+                this.SizeLabel = new Size(100, 20);
+                this.SizeControl = new Size(100, 20);
+                this.StartAutoSizeConfig();
+            }
+               
         }
         #endregion
+
+        /// <summary>
+        /// Ckeck if the filed is Empty or Not
+        /// </summary>
+        public virtual Boolean isEmpty
+        {
+            get {
+                return false;
+            }
+        }
 
         public void StopAutoSizeConfig()
         {
@@ -177,10 +201,16 @@ namespace App.Gwin.Fields
 
                 this.splitContainer.SplitterDistance = this.SizeLabel.Height;
                 this.splitContainer.Orientation = Orientation.Horizontal;
-                
+
                 // Containner
                 this.splitContainer.SplitterDistance = this.SizeLabel.Height;
             }
         }
+
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+          //  throw new NotImplementedException();
+        }
+
     }
 }

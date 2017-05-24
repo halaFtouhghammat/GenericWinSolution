@@ -10,6 +10,7 @@ using App.Gwin.GwinApplication.Security.Attributes;
 using App.Gwin.FieldsTraitements;
 using App.Shared.AttributesManager;
 using App.Gwin.Logging;
+using GenericWinForm.Demo.Entities.ProjectManager;
 
 namespace GenericWinForm.Demo.BAL
 {
@@ -34,7 +35,7 @@ namespace GenericWinForm.Demo.BAL
                 //[BL] the name mut be UperCase
                 case nameof(TaskProject.Title):
                     {
-                        entityMiniConfig.Title = entityMiniConfig.Title.ToUpper();
+                        entityMiniConfig.Title.Current = entityMiniConfig.Title.Current.ToUpper();
                     }
                     break;
             }

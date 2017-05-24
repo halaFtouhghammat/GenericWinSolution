@@ -63,7 +63,7 @@ namespace App.Gwin.FieldsTraitements
             comboBoxField.SizeControl = param.SizeControl;
 
             comboBoxField.TabIndex = param.TabIndex;
-            comboBoxField.Text_Label = param.ConfigProperty.DisplayProperty.Titre;
+            comboBoxField.Text_Label = param.ConfigProperty.DisplayProperty.Title;
             comboBoxField.ConfigSizeField();
 
             // DataSource
@@ -110,7 +110,7 @@ namespace App.Gwin.FieldsTraitements
             stringFiled.SizeControl = param.SizeControl;
             stringFiled.OrientationField = Orientation.Horizontal;
             stringFiled.TabIndex = param.TabIndex;
-            stringFiled.Text_Label = param.ConfigProperty.DisplayProperty.Titre;
+            stringFiled.Text_Label = param.ConfigProperty.DisplayProperty.Title;
 
             stringFiled.ConfigSizeField();
 
@@ -119,7 +119,7 @@ namespace App.Gwin.FieldsTraitements
             List<string> ls_data_string = ls_data.Cast<Object>().Select(o => o.ToString()).ToList<string>();
 
             // Add Blank Data 
-            if (param.ConfigProperty.Filter.isValeurFiltreVide)
+            if (param.ConfigProperty.Filter.isDefaultIsEmpty)
                 ls_data_string.Insert(0, "");
             stringFiled.DataSource = ls_data_string.ToList<object>();
 
@@ -148,7 +148,7 @@ namespace App.Gwin.FieldsTraitements
         {
             param.Column.ValueType = typeof(String);
             param.Column.DataPropertyName = param.ConfigProperty.PropertyInfo.Name;
-            param.Column.HeaderText = param.ConfigProperty.DisplayProperty.Titre;
+            param.Column.HeaderText = param.ConfigProperty.DisplayProperty.Title;
             param.Column.Name = param.ConfigProperty.PropertyInfo.Name;
             param.Column.ReadOnly = true;
             if (param.ConfigProperty.DataGrid?.WidthColonne != 0)
